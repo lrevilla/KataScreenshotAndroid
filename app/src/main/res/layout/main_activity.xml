@@ -53,7 +53,7 @@
       android:id="@+id/tv_empty_case"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="¯\\_(ツ)_/¯"
+      android:text="(╯°□°）╯︵ ɹǝddɐɹʍ"
       android:layout_centerInParent="true"
       android:textColor="@android:color/white"
       android:visibility="gone"
