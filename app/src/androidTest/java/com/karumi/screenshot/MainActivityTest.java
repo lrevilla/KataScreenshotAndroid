@@ -18,6 +18,7 @@ package com.karumi.screenshot;
 
 import android.app.Activity;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import com.karumi.screenshot.di.MainComponent;
 import com.karumi.screenshot.di.MainModule;
@@ -28,10 +29,15 @@ import it.cosenonjaviste.daggermock.DaggerMockRule;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.RecursiveAction;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.mockito.Mockito.when;
 
 public class MainActivityTest extends ScreenshotTest {
@@ -67,6 +73,27 @@ public class MainActivityTest extends ScreenshotTest {
     givenThereIsOneSuperHero();
 
     Activity activity = startActivity();
+
+    compareScreenshot(activity);
+  }
+
+  @Test public void showsSomeRowsIfThereAreTenSuperHeroes() {
+    this.ANY_AVENGER = true;
+    givenThereAreSomeSuperHeroes(10);
+
+    Activity activity = startActivity();
+
+    compareScreenshot(activity);
+  }
+
+  @Test public void showsEndOfSuperHeroList() {
+    this.ANY_AVENGER = true;
+    givenThereAreSomeSuperHeroes(100);
+
+    Activity activity = startActivity();
+
+    onView(withId(R.id.recycler_view))
+      .perform(RecyclerViewActions.actionOnItemAtPosition(99, scrollTo()));
 
     compareScreenshot(activity);
   }
