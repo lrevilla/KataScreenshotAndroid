@@ -36,6 +36,7 @@ import static org.mockito.Mockito.when;
 
 public class MainActivityTest extends ScreenshotTest {
 
+  private static boolean ANY_AVENGER = false;
   @Rule public DaggerMockRule<MainComponent> daggerRule =
       new DaggerMockRule<>(MainComponent.class, new MainModule()).set(
           new DaggerMockRule.ComponentSetter<MainComponent>() {
@@ -61,12 +62,25 @@ public class MainActivityTest extends ScreenshotTest {
     compareScreenshot(activity);
   }
 
-  private List<SuperHero> givenThereAreSomeSuperHeroes(int numberOfSuperHeroes, boolean avengers) {
+  @Test public void showsOneRowIfThereIsOneSuperHero() {
+    this.ANY_AVENGER = true;
+    givenThereIsOneSuperHero();
+
+    Activity activity = startActivity();
+
+    compareScreenshot(activity);
+  }
+
+  private List<SuperHero> givenThereIsOneSuperHero() {
+    return givenThereAreSomeSuperHeroes(1);
+  }
+
+  private List<SuperHero> givenThereAreSomeSuperHeroes(int numberOfSuperHeroes) {
     List<SuperHero> superHeroes = new LinkedList<>();
     for (int i = 0; i < numberOfSuperHeroes; i++) {
       String superHeroName = "SuperHero - " + i;
       String superHeroDescription = "Description Super Hero - " + i;
-      SuperHero superHero = new SuperHero(superHeroName, null, avengers, superHeroDescription);
+      SuperHero superHero = new SuperHero(superHeroName, null, ANY_AVENGER, superHeroDescription);
       superHeroes.add(superHero);
       when(repository.getByName(superHeroName)).thenReturn(superHero);
     }
