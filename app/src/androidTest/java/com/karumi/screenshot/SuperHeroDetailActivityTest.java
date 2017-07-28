@@ -30,9 +30,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import java.util.List;
+
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.mockito.Mockito.when;
 
 public class SuperHeroDetailActivityTest extends ScreenshotTest {
+
+  private static final boolean IS_AVENGER = true;
+  private static final boolean IS_NOT_AVENGER = false;
+
 
   @Rule public DaggerMockRule<MainComponent> daggerRule =
       new DaggerMockRule<>(MainComponent.class, new MainModule()).set(
@@ -51,31 +59,57 @@ public class SuperHeroDetailActivityTest extends ScreenshotTest {
 
   @Mock SuperHeroesRepository repository;
 
-  @Test public void showsAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam() {
-    SuperHero superHero = givenAnAvenger();
+  @Test public void showsAvengerDetails() {
+    SuperHero avenger = givenASuperHero(SuperHeroMother.createAvenger());
+
+    Activity activity = startActivity(avenger);
+
+    compareScreenshot(activity);
+  }
+
+  @Test public void showsSuperHeroDetails() {
+    SuperHero superHero = givenASuperHero(SuperHeroMother.createSuperHero());
 
     Activity activity = startActivity(superHero);
 
     compareScreenshot(activity);
   }
 
-  @Test public void doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam() {
-    SuperHero superHero = givenThereIsASuperHero(false);
+  @Test public void showsSuperHeroLongName() {
+    SuperHero superHero = givenASuperHero(SuperHeroMother.createGermanSuperHero());
 
     Activity activity = startActivity(superHero);
 
     compareScreenshot(activity);
   }
 
-  private SuperHero givenAnAvenger() {
-    return givenThereIsASuperHero(true);
+  @Test public void showsSuperHeroStrangeNameDescription() {
+    SuperHero superHero = givenASuperHero(SuperHeroMother.createJapaneseSuperHero());
+
+    Activity activity = startActivity(superHero);
+
+    compareScreenshot(activity);
   }
 
-  private SuperHero givenThereIsASuperHero(boolean isAvenger) {
-    String superHeroName = "SuperHero";
-    String superHeroDescription = "Super Hero Description";
-    SuperHero superHero = new SuperHero(superHeroName, null, isAvenger, superHeroDescription);
-    when(repository.getByName(superHeroName)).thenReturn(superHero);
+  @Test public void showsSuperHeroWithEmojiNameDescription() {
+    SuperHero superHero = givenASuperHero(SuperHeroMother.createMillenialSuperHero());
+
+    Activity activity = startActivity(superHero);
+
+    compareScreenshot(activity);
+  }
+
+  @Test public void showsSuperHeroScrollDescription() {
+    SuperHero superHero = givenASuperHero(SuperHeroMother.createGermanSuperHero());
+    Activity activity = startActivity(superHero);
+
+    onView(withId(R.id.tv_super_hero_description));
+
+    compareScreenshot(activity);
+  }
+
+  private SuperHero givenASuperHero(SuperHero superHero) {
+    when(repository.getByName(superHero.getName())).thenReturn(superHero);
     return superHero;
   }
 
