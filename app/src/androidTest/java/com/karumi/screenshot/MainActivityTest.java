@@ -89,7 +89,6 @@ public class MainActivityTest extends ScreenshotTest {
   @Test public void showsEndOfSuperHeroList() {
     this.ANY_AVENGER = true;
     givenThereAreSomeSuperHeroes(100);
-
     Activity activity = startActivity();
 
     onView(withId(R.id.recycler_view))
