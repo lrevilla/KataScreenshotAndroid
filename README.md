@@ -10,7 +10,7 @@
 
 ---
 
-## Getting started
+## Getting started 
 
 This repository contains an Android application to show Super Heroes information:
 
